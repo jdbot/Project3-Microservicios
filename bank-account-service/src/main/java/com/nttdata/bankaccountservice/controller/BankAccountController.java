@@ -38,9 +38,16 @@ public class BankAccountController {
     }
 
     //Method to insert a new bank account
-    @PostMapping("/register")
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<BankAccount> register(@RequestBody BankAccount bankAccount) {
+        return bankAccountService.register(bankAccount);
+    }
+
+    //Method to insert a new bank account
+    @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<BankAccount> registerWithValidation(@RequestBody BankAccount bankAccount) {
         return bankAccountService.validateRegister(bankAccount);
     }
 
@@ -108,4 +115,24 @@ public class BankAccountController {
         return bankAccountService.doTransactionBetweenAccounts(tba);
     }
 
+    //Method to get the accounts associated to a debit card
+    @GetMapping("/findAccounts/{debitCardId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Flux<BankAccount> findAccountsByDebitCard(@PathVariable("debitCardId") String debitCardId) {
+        return bankAccountService.findAccountsByDebitCard(debitCardId);
+    }
+
+    //Method to associate a bankAccount to a debitCard
+    @PutMapping("/associate/{bankAccountId}/{debitCardId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<BankAccount> associateToDebitCard(@PathVariable("bankAccountId") String bankAccountId, @PathVariable("debitCardId") String debitCardId) {
+        return bankAccountService.associateToDebitCard(bankAccountId,debitCardId);
+    }
+
+    //Method to make an account the primary account
+    @PutMapping("/primaryAccount/{bankAccountId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<BankAccount> makePrimaryAccount(@PathVariable("bankAccountId") String bankAccountId) {
+        return bankAccountService.makePrimaryAccount(bankAccountId);
+    }
 }

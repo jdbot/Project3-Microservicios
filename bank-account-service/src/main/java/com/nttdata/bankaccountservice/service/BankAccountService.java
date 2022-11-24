@@ -37,4 +37,10 @@ public interface BankAccountService {
     Mono<BankAccount> doTransactionBetweenAccounts(TransactionBetweenAccountsDto t);
 
     Mono<BankAccount> doCommission(Transaction transaction);
+
+    Flux<BankAccount> findAccountsByDebitCard(String debitCardId);
+
+    Mono<BankAccount> associateToDebitCard(String bankAccountId, String debitCardId);
+
+    Mono<BankAccount> makePrimaryAccount(String bankAccountId);
 }

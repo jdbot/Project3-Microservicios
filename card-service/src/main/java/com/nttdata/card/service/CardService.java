@@ -18,4 +18,8 @@ public interface CardService {
     public Mono<Void> delete(String id);
 
     public Mono<DebitCard> findById(String id);
+
+    public Mono<DebitCard> associatePrimaryAccount(String idAccount);
+
+    public Mono<Float> getPrimaryAccountAmount(String debitCardId);
 }

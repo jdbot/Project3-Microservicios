@@ -12,4 +12,7 @@ import reactor.core.publisher.Flux;
 public interface BankAccountRepository extends ReactiveMongoRepository<BankAccount, String> {
 
     Flux<BankAccount> findByCustomerIdAndType(String customerId, String type);
+
+    Flux<BankAccount> findByDebitCardId(String debitCardId);
+
 }

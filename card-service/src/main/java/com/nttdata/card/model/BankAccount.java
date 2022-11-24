@@ -1,4 +1,4 @@
-package com.nttdata.bankaccountservice.document;
+package com.nttdata.card.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,10 +14,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "bank-accounts")
 public class BankAccount {
 
-    @Id
     private String id;
     //number account of the bank account
     private String numberAccount;

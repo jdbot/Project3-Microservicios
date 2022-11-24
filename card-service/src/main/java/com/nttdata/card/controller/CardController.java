@@ -55,4 +55,18 @@ public class CardController {
     public Mono<Void> delete(@PathVariable("id") String id) {
         return cardService.delete(id);
     }
+
+    //Method to associate a primary account
+    @PutMapping("/associatePrimaryAccount/{bankAccountId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<DebitCard> associatePrimaryAccount(@PathVariable("bankAccountId") String idAccount) {
+        return cardService.associatePrimaryAccount(idAccount);
+    }
+
+    //Method to get amount of associated primary account
+    @GetMapping("/primaryAccount/{debitCardId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<Float> getPrimaryAccountAmount(@PathVariable("debitCardId") String debitCardId) {
+        return cardService.getPrimaryAccountAmount(debitCardId);
+    }
 }

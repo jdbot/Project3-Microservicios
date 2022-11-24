@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 
 /**
  * Bank Account Service Implementation.
@@ -26,7 +27,6 @@ import java.time.Duration;
 public class BankAccountServiceImpl implements BankAccountService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BankAccountServiceImpl.class);
-
 
     @Autowired
     private WebClient.Builder webClient;
@@ -169,4 +169,29 @@ public class BankAccountServiceImpl implements BankAccountService {
             }
         });
     }
+
+    @Override
+    public Flux<BankAccount> findAccountsByDebitCard(String debitCardId) {
+        return this.bankAccountRepository.findByDebitCardId(debitCardId);
+    }
+
+    @Override
+    public Mono<BankAccount> associateToDebitCard(String bankAccountId, String debitCardId) {
+        return findById(bankAccountId).map(account -> {
+            account.setDebitCardId(debitCardId);
+            account.setAssociationDate(LocalDateTime.now().toString());
+            account.setPrimaryAccount(false);
+            return account;
+        }).flatMap(account -> update(account));
+    }
+
+    @Override
+    public Mono<BankAccount> makePrimaryAccount(String bankAccountId) {
+        return findById(bankAccountId).map(account -> {
+            account.setPrimaryAccount(true);
+            return account;
+        }).flatMap(account -> update(account));
+    }
+
+
 }
