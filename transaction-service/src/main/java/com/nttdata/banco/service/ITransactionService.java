@@ -25,4 +25,8 @@ public interface ITransactionService {
     public Flux<Transaction> findTransactionsByAccountId(String idAccount);
 
     public Mono<Map<String, Double>> makeAmountAvgReport(String idClient);
+
+    public Flux<Transaction> findTransactionsByCardId(String idCard);
+
+    Flux<Transaction> findCommissionByAccountId(String idAccount, String startDate, String endDate);
 }

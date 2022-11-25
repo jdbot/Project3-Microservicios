@@ -1,5 +1,6 @@
-package com.nttdata.bankreportservice.dto;
+package com.nttdata.bankaccountservice.dto;
 
+import com.nttdata.bankaccountservice.document.AccountType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 @NoArgsConstructor
-public class BankAccountDTO {
+public class BankAccountDto {
 
         private String id;
         //number account of the bank account
@@ -20,9 +21,9 @@ public class BankAccountDTO {
         private String endDate;
         //id of the client
         private String customerId;
-        //id of the bank type
-        private String type;
-        //creation date of the bank account
-        private String creationDate;
+        //full name of the client
+        private String customerName;
+        //type of the bank account
+        private AccountType type;
 
 }

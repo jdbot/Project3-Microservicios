@@ -1,10 +1,8 @@
 package com.nttdata.bankaccountservice.service.impl;
 
 import com.nttdata.bankaccountservice.document.BankAccount;
-import com.nttdata.bankaccountservice.dto.BankDebtDTO;
-import com.nttdata.bankaccountservice.dto.ClientDTO;
+import com.nttdata.bankaccountservice.dto.*;
 import com.nttdata.bankaccountservice.document.Transaction;
-import com.nttdata.bankaccountservice.dto.TransactionBetweenAccountsDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -18,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 /**
@@ -69,10 +66,10 @@ public class BankAccountServiceImpl implements BankAccountService {
     }
 
     @Override
-    public Mono<ClientDTO> findClientById(String clientId) {
+    public Mono<ClientDto> findClientById(String clientId) {
         LOGGER.info("Consulted client from the bank-account-service");
-        Mono<ClientDTO> client = this.webClient.build().get().uri("/client/{id}", clientId)
-                .retrieve().bodyToMono(ClientDTO.class);
+        Mono<ClientDto> client = this.webClient.build().get().uri("/client/{id}", clientId)
+                .retrieve().bodyToMono(ClientDto.class);
 //                .delayElement(Duration.ofSeconds(5)); // testing the timeout de 2s
         return client;
     }
@@ -81,7 +78,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     public Mono<BankAccount> validateRegister(BankAccount bankAccount) {
         return this.webClient.build().get().uri("/client/{id}", bankAccount.getCustomerId())
             .retrieve()
-            .bodyToMono(ClientDTO.class)
+            .bodyToMono(ClientDto.class)
             .flatMap(dc -> {
                 if (dc.getType().equals("business")) {
                     return this.accountTypeService.findById(bankAccount.getType()).filter(obj ->
@@ -209,7 +206,16 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Override
     public Mono<String> findClientHasDebt(String clientId) {
         return this.webClient.build().get().uri("/bankDebt/debtByCustomerId/{id}", clientId)
-                .retrieve().bodyToFlux(BankDebtDTO.class).next()
+                .retrieve().bodyToFlux(BankDebtDto.class).next()
                 .flatMap(x->Mono.just("1"));
+    }
+    @Override
+    public Mono<BankCreditDto> doPayCreditThird(TransactionPayCreditThirdDto t) {
+        Transaction tSender = new Transaction(t.getTransactionDate(), t.getAmount(), "withdrawl",null, t.getSenderAccountId(), 0);
+        Transaction tReceptor = new Transaction(t.getTransactionDate(), t.getAmount(), "credit payment", null, t.getReceptorCreditId(), 0);
+        return doWithdrawl(tSender).flatMap(x -> {
+            return this.webClient.build().post().uri("/bankCredit/paycredit").bodyValue(tReceptor)
+                    .retrieve().bodyToFlux(BankCreditDto.class).next();
+        });
     }
 }

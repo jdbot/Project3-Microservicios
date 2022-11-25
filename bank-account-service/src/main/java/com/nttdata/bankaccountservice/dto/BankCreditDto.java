@@ -1,4 +1,4 @@
-package com.nttdata.bankreportservice.dto;
+package com.nttdata.bankaccountservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BankCreditDTO {
+public class BankCreditDto {
 
     private String id;
     //number credit of the bank credit
@@ -18,8 +18,12 @@ public class BankCreditDTO {
     private Float amount;
     //credit
     private Float credit;
+    //start date of the bank credit
+    private String startDate;
     //end date of the bank credit
     private String endDate;
+    //payment date of the bank credit
+    private String paymentDate;
     //id of the client
     private String customerId;
     //full name of the client

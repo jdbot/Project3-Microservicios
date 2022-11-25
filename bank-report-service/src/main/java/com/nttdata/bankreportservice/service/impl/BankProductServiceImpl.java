@@ -10,9 +10,8 @@ import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -22,35 +21,35 @@ import java.util.List;
 public class BankProductServiceImpl implements BankProductService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BankProductServiceImpl.class);
-
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Autowired
     private WebClient.Builder webClient;
 
     @Override
-    public Mono<ClientDTO> getClient(String customerId) {
+    public Mono<ClientDto> getClient(String customerId) {
         return this.webClient.build().get().uri("/client/{id}", customerId)
-                .retrieve().bodyToMono(ClientDTO.class);
+                .retrieve().bodyToMono(ClientDto.class);
     }
 
     @Override
-    public Flux<BankAccountSummaryDTO> getBankAccountByCustomer(String customerId) {
+    public Flux<BankAccountSummaryDto> getBankAccountByCustomer(String customerId) {
         return this.webClient.build().get().uri("/bankAccount/accountByCustomerId/{id}", customerId)
-        .retrieve().bodyToFlux(BankAccountSummaryDTO.class);
+        .retrieve().bodyToFlux(BankAccountSummaryDto.class);
     }
 
     @Override
-    public Flux<BankCreditSummaryDTO> getBankCreditByCustomer(String customerId) {
+    public Flux<BankCreditSummaryDto> getBankCreditByCustomer(String customerId) {
         return this.webClient.build().get().uri("/bankCredit/creditByCustomerId/{id}", customerId)
-                .retrieve().bodyToFlux(BankCreditSummaryDTO.class);
+                .retrieve().bodyToFlux(BankCreditSummaryDto.class);
     }
 
     @Override
-    public Mono<BankProductSummaryDTO> getBankProductByCustomer(String customerId) {
-        Mono<ClientDTO> dataClient = getClient(customerId);
-        Mono<List<BankAccountSummaryDTO>> account = getBankAccountByCustomer(customerId).collectList();
-        Mono<List<BankCreditSummaryDTO>> credit = getBankCreditByCustomer(customerId).collectList();
-        BankProductSummaryDTO product = new BankProductSummaryDTO();
+    public Mono<BankProductSummaryDto> getBankProductByCustomer(String customerId) {
+        Mono<ClientDto> dataClient = getClient(customerId);
+        Mono<List<BankAccountSummaryDto>> account = getBankAccountByCustomer(customerId).collectList();
+        Mono<List<BankCreditSummaryDto>> credit = getBankCreditByCustomer(customerId).collectList();
+        BankProductSummaryDto product = new BankProductSummaryDto();
 
         return dataClient.flatMap( c-> {
             product.setClientName(c.getName());
@@ -67,18 +66,23 @@ public class BankProductServiceImpl implements BankProductService {
     }
 
     @Override
-    public Flux<BankAccountDTO> getBankAccount(String startDate, String endDate) {
+    public Flux<BankAccountDto> getBankAccount(String startDate, String endDate) {
         return this.webClient.build().get().uri("/bankAccount")
-                .retrieve().bodyToFlux(BankAccountDTO.class);
+                .retrieve().bodyToFlux(BankAccountDto.class)
+                .filter(x-> LocalDate.from(LocalDate.parse(x.getCreationDate(),formatter))
+                        .compareTo(LocalDate.from(LocalDate.parse(startDate,formatter))) > 0 &&
+                        LocalDate.from(LocalDate.parse(x.getCreationDate(),formatter))
+                                .compareTo(LocalDate.from(LocalDate.parse(endDate,formatter))) < 0);
     }
 
     @Override
-    public Flux<BankCreditDTO> getBankCredit(String startDate, String endDate) {
+    public Flux<BankCreditDto> getBankCredit(String startDate, String endDate) {
         return this.webClient.build().get().uri("/bankCredit")
-                .retrieve().bodyToFlux(BankCreditDTO.class);
+                .retrieve().bodyToFlux(BankCreditDto.class)
+                .filter(x-> LocalDate.from(LocalDate.parse(x.getCreationDate(),formatter))
+                        .compareTo(LocalDate.from(LocalDate.parse(startDate,formatter))) > 0 &&
+                        LocalDate.from(LocalDate.parse(x.getCreationDate(),formatter))
+                                .compareTo(LocalDate.from(LocalDate.parse(endDate,formatter))) < 0);
     }
-
-
-
 
 }

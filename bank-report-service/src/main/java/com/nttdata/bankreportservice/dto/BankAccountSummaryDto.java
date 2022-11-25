@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 @NoArgsConstructor
-public class BankAccountSummaryDTO {
+public class BankAccountSummaryDto {
 
         //number account of the bank account
         private String numberAccount;

@@ -1,9 +1,11 @@
 package com.nttdata.bankaccountservice.controller;
 
 import com.nttdata.bankaccountservice.document.BankAccount;
-import com.nttdata.bankaccountservice.dto.ClientDTO;
+import com.nttdata.bankaccountservice.dto.BankCreditDto;
+import com.nttdata.bankaccountservice.dto.ClientDto;
 import com.nttdata.bankaccountservice.document.Transaction;
 import com.nttdata.bankaccountservice.dto.TransactionBetweenAccountsDto;
+import com.nttdata.bankaccountservice.dto.TransactionPayCreditThirdDto;
 import com.nttdata.bankaccountservice.service.BankAccountService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +78,7 @@ public class BankAccountController {
      @GetMapping("/findClientById/{id}")
     @ResponseStatus(HttpStatus.OK)
     @CircuitBreaker(name="client", fallbackMethod = "fallBackGetFindByClientId")
-    public Mono<ClientDTO> findByClientId(@PathVariable("id") String id) {
+    public Mono<ClientDto> findByClientId(@PathVariable("id") String id) {
         return bankAccountService.findClientById(id);
     }
 
@@ -141,6 +143,13 @@ public class BankAccountController {
     @ResponseStatus(HttpStatus.OK)
     public Flux<BankAccount> findByCustomerId(@PathVariable("id") String customerId) {
         return bankAccountService.findByCustomerId(customerId);
+    }
+
+    //Method to do a Payment of credit to third
+    @PutMapping("/tpt")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<BankCreditDto> doPayCreditThird(@RequestBody TransactionPayCreditThirdDto tba) {
+        return bankAccountService.doPayCreditThird(tba);
     }
 
 }

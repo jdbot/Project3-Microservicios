@@ -18,6 +18,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.GroupedFlux;
 import reactor.core.publisher.Mono;
 
+import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 /**
@@ -78,5 +79,21 @@ public class TransactionController {
     @ResponseStatus(HttpStatus.OK)
     public Mono<Map<String, Double>> makeAmountAvgReport(@PathVariable("id") String clientId) {
         return transactionService.makeAmountAvgReport(clientId);
+    }
+
+    //Method to get top 10 all the transactions of a card
+    @GetMapping("/card/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Flux<Transaction> findTransactionsByCardId(@PathVariable("id") String cardId) {
+        return transactionService.findTransactionsByCardId(cardId);
+    }
+
+    //Method to get all the commission of an account by date range
+    @GetMapping("/commissionByAccount/{id}/{startDate}/{endDate}")
+    @ResponseStatus(HttpStatus.OK)
+    public Flux<Transaction> findCommissionByAccountId(@PathVariable("id") @NotNull String accountId,
+                                                       @PathVariable("startDate") @NotNull String startDate,
+                                                       @PathVariable("endDate") @NotNull String endDate) {
+        return transactionService.findCommissionByAccountId(accountId,startDate,endDate);
     }
 }

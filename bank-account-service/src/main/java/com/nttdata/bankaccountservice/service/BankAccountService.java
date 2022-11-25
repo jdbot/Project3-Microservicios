@@ -1,10 +1,8 @@
 package com.nttdata.bankaccountservice.service;
 
 import com.nttdata.bankaccountservice.document.BankAccount;
-import com.nttdata.bankaccountservice.dto.BankDebtDTO;
-import com.nttdata.bankaccountservice.dto.ClientDTO;
+import com.nttdata.bankaccountservice.dto.*;
 import com.nttdata.bankaccountservice.document.Transaction;
-import com.nttdata.bankaccountservice.dto.TransactionBetweenAccountsDto;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -25,7 +23,7 @@ public interface BankAccountService {
 
     Mono<Boolean> existsById(String id);
 
-    Mono<ClientDTO> findClientById(String clientId);
+    Mono<ClientDto> findClientById(String clientId);
 
     Flux<BankAccount> findByCustomerIdAndType(String customerId, String type);
 
@@ -48,4 +46,6 @@ public interface BankAccountService {
     Flux<BankAccount> findByCustomerId(String customerId);
 
     Mono<String> findClientHasDebt(String clientId);
+
+    Mono<BankCreditDto> doPayCreditThird(TransactionPayCreditThirdDto t);
 }

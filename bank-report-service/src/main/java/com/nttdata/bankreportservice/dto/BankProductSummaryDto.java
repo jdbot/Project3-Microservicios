@@ -11,12 +11,12 @@ import java.util.List;
 @AllArgsConstructor
 @Setter
 @NoArgsConstructor
-public class BankProductSummaryDTO {
+public class BankProductSummaryDto {
 
     //Full name of the client
     private String clientName;
     //data of the bank account
-    private List<BankAccountSummaryDTO> bankAccount;
+    private List<BankAccountSummaryDto> bankAccount;
     //data of the bank credit
-    private List<BankCreditSummaryDTO> BankCredit;
+    private List<BankCreditSummaryDto> BankCredit;
 }

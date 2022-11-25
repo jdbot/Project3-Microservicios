@@ -1,4 +1,4 @@
-package com.nttdata.bankreportservice.dto;
+package com.nttdata.bankaccountservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 @NoArgsConstructor
-public class ClientDTO {
+public class ClientDto {
 
     public String id;
     //Full name of the client

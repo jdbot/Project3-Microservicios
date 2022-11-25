@@ -9,16 +9,16 @@ import reactor.core.publisher.Mono;
  */
 public interface BankProductService {
 
-    Mono<ClientDTO> getClient(String customerId);
+    Mono<ClientDto> getClient(String customerId);
 
-    Flux<BankAccountSummaryDTO> getBankAccountByCustomer(String customerId);
+    Flux<BankAccountSummaryDto> getBankAccountByCustomer(String customerId);
 
-    Flux<BankCreditSummaryDTO> getBankCreditByCustomer(String customerId);
+    Flux<BankCreditSummaryDto> getBankCreditByCustomer(String customerId);
 
-    Mono<BankProductSummaryDTO> getBankProductByCustomer(String customerId);
+    Mono<BankProductSummaryDto> getBankProductByCustomer(String customerId);
 
-    Flux<BankAccountDTO> getBankAccount(String startDate, String endDate);
+    Flux<BankAccountDto> getBankAccount(String startDate, String endDate);
 
-    Flux<BankCreditDTO> getBankCredit(String startDate, String endDate);
+    Flux<BankCreditDto> getBankCredit(String startDate, String endDate);
 
 }
