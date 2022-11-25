@@ -1,6 +1,7 @@
 package com.nttdata.bankaccountservice.service.impl;
 
 import com.nttdata.bankaccountservice.document.BankAccount;
+import com.nttdata.bankaccountservice.dto.BankDebtDTO;
 import com.nttdata.bankaccountservice.dto.ClientDTO;
 import com.nttdata.bankaccountservice.document.Transaction;
 import com.nttdata.bankaccountservice.dto.TransactionBetweenAccountsDto;
@@ -87,9 +88,15 @@ public class BankAccountServiceImpl implements BankAccountService {
                         obj.getCode().equals("3"))
                         .flatMap(x-> register(bankAccount));
                 } else {
-                    return Mono.empty();
+                    return findClientHasDebt(bankAccount.getCustomerId()).flatMap(x->{
+                        LOGGER.info(x);
+                        if (x.equals("1")) {
+                            throw new RuntimeException("Client has overdue debt");
+                        } else {
+                            return register(bankAccount);
+                        }
+                    }).switchIfEmpty(register(bankAccount));
                 }
-
             });
     }
 
@@ -193,5 +200,16 @@ public class BankAccountServiceImpl implements BankAccountService {
         }).flatMap(account -> update(account));
     }
 
+    public Flux<BankAccount> findByCustomerId(String customerId) {
+        LOGGER.info("findByCustomerId");
+        return this.bankAccountRepository.findByCustomerId(
+                        customerId);
+    }
 
+    @Override
+    public Mono<String> findClientHasDebt(String clientId) {
+        return this.webClient.build().get().uri("/bankDebt/debtByCustomerId/{id}", clientId)
+                .retrieve().bodyToFlux(BankDebtDTO.class).next()
+                .flatMap(x->Mono.just("1"));
+    }
 }

@@ -43,5 +43,7 @@ public class BankAccount {
     private boolean isPrimaryAccount;
     //Date of association to debit card
     private String associationDate;
+    //creation date of the bank account
+    private String creationDate;
 
 }

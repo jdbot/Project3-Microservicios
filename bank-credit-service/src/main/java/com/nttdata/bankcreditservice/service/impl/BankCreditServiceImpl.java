@@ -1,9 +1,11 @@
 package com.nttdata.bankcreditservice.service.impl;
 
 import com.nttdata.bankcreditservice.document.BankCredit;
+import com.nttdata.bankcreditservice.document.BankDebt;
 import com.nttdata.bankcreditservice.document.Transaction;
 import com.nttdata.bankcreditservice.repository.BankCreditRepository;
 import com.nttdata.bankcreditservice.service.BankCreditService;
+import com.nttdata.bankcreditservice.service.BankDebtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -20,6 +22,9 @@ public class BankCreditServiceImpl implements BankCreditService {
 
     @Autowired
     private BankCreditRepository bankCreditRepository;
+
+    @Autowired
+    private BankDebtService bankDebtService;
 
     @Autowired
     private WebClient.Builder webClient;
@@ -95,4 +100,11 @@ public class BankCreditServiceImpl implements BankCreditService {
             }
         });
     }
+
+    @Override
+    public Flux<BankCredit> findByCustomerId(String customerId) {
+        return this.bankCreditRepository.findByCustomerId(
+                customerId);
+    }
+
 }

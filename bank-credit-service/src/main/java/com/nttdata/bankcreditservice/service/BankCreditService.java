@@ -21,6 +21,10 @@ public interface BankCreditService {
     Mono<Void> delete(String id);
 
     Mono<Boolean> existsById(String id);
+
     Mono<BankCredit> payCredit(Transaction transaction);
+
     Mono<BankCredit> chargeCredit(Transaction transaction);
+
+    Flux<BankCredit> findByCustomerId(String customerId);
 }
