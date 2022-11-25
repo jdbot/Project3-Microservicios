@@ -1,4 +1,4 @@
-package com.nttdata.bankaccountservice;
+package com.nttdata.bankreportservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,13 +7,12 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 /**
  * Main Class.
  */
-
 @EnableEurekaClient
 @SpringBootApplication
-public class BankAccountServiceApplication {
+public class BankReportServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BankAccountServiceApplication.class, args);
+		SpringApplication.run(BankReportServiceApplication.class, args);
 	}
 
 }

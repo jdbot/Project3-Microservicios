@@ -37,5 +37,7 @@ public class BankAccount {
     private Integer commission;
     //transaction limit of the bank account
     private Integer transactionLimit;
+    //creation date of the bank account
+    private String creationDate;
 
 }

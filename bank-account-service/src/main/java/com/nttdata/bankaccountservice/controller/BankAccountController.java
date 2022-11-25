@@ -66,7 +66,7 @@ public class BankAccountController {
     }
 
     //Method to get a client by ID
-    // @GetMapping("/findClientById/{id}")
+     @GetMapping("/findClientById/{id}")
     @ResponseStatus(HttpStatus.OK)
     @CircuitBreaker(name="client", fallbackMethod = "fallBackGetFindByClientId")
     public Mono<ClientDTO> findByClientId(@PathVariable("id") String id) {
@@ -106,6 +106,13 @@ public class BankAccountController {
     @ResponseStatus(HttpStatus.OK)
     public Mono<BankAccount> doTransactionBetweenAccounts(@RequestBody TransactionBetweenAccountsDto tba) {
         return bankAccountService.doTransactionBetweenAccounts(tba);
+    }
+
+    //Method to get a bank account by clientId
+    @GetMapping("/accountByCustomerId/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Flux<BankAccount> findByCustomerId(@PathVariable("id") String customerId) {
+        return bankAccountService.findByCustomerId(customerId);
     }
 
 }

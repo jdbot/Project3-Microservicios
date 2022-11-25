@@ -1,6 +1,7 @@
 package com.nttdata.bankaccountservice.service;
 
 import com.nttdata.bankaccountservice.document.BankAccount;
+import com.nttdata.bankaccountservice.dto.BankDebtDTO;
 import com.nttdata.bankaccountservice.dto.ClientDTO;
 import com.nttdata.bankaccountservice.document.Transaction;
 import com.nttdata.bankaccountservice.dto.TransactionBetweenAccountsDto;
@@ -37,4 +38,8 @@ public interface BankAccountService {
     Mono<BankAccount> doTransactionBetweenAccounts(TransactionBetweenAccountsDto t);
 
     Mono<BankAccount> doCommission(Transaction transaction);
+
+    Flux<BankAccount> findByCustomerId(String customerId);
+
+    Mono<String> findClientHasDebt(String clientId);
 }

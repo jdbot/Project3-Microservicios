@@ -76,4 +76,11 @@ public class BankCreditController {
         return bankCreditService.chargeCredit(transaction);
     }
 
+    //Method to get a bank credit by clientId
+    @GetMapping("/creditByCustomerId/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Flux<BankCredit> findByCustomerId(@PathVariable("id") String customerId) {
+        return bankCreditService.findByCustomerId(customerId);
+    }
+
 }
