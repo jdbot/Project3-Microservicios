@@ -1,5 +1,6 @@
 package com.nttdata.card.controller;
 
+import com.nttdata.card.model.BankAccount;
 import com.nttdata.card.model.DebitCard;
 import com.nttdata.card.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,5 +69,12 @@ public class CardController {
     @ResponseStatus(HttpStatus.OK)
     public Mono<Float> getPrimaryAccountAmount(@PathVariable("debitCardId") String debitCardId) {
         return cardService.getPrimaryAccountAmount(debitCardId);
+    }
+
+    //Method to make a payment with debit card
+    @PutMapping("/payWithDebitCard/{debitCardId}/{amountToPay}")
+    @ResponseStatus(HttpStatus.OK)
+    public Flux<BankAccount> payWithDebitCard(@PathVariable("debitCardId") String debitCardId, @PathVariable("amountToPay") Float amountToPay) {
+        return cardService.payWithDebitCard(debitCardId, amountToPay);
     }
 }

@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @Setter
 @NoArgsConstructor
-@Document(collection = "transactions")
+@Document(collection = "debitcards")
 public class DebitCard {
     @Id
     public String id;

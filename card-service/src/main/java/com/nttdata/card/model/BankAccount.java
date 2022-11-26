@@ -20,7 +20,7 @@ public class BankAccount {
     //number account of the bank account
     private String numberAccount;
     //amount of the bank account
-    private Float amount;
+    private float amount;
     //end date of the bank account
     private String endDate;
     //id of the client
@@ -41,5 +41,7 @@ public class BankAccount {
     private boolean isPrimaryAccount;
     //Date of association to debit card
     private String associationDate;
+    //creation date of the bank account
+    private String creationDate;
 
 }

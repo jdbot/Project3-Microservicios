@@ -1,5 +1,6 @@
 package com.nttdata.card.service;
 
+import com.nttdata.card.model.BankAccount;
 import com.nttdata.card.model.DebitCard;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -22,4 +23,6 @@ public interface CardService {
     public Mono<DebitCard> associatePrimaryAccount(String idAccount);
 
     public Mono<Float> getPrimaryAccountAmount(String debitCardId);
+
+    public Flux<BankAccount> payWithDebitCard(String debitCardId, Float amountToPay);
 }
