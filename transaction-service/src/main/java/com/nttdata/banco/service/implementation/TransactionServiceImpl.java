@@ -56,7 +56,7 @@ public class TransactionServiceImpl implements ITransactionService {
 
     @Override
     public Mono<Map<String, Double>> makeAmountAvgReport(String idClient) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         YearMonth monthYear = YearMonth.now();
         return transactionRepository.findAllByIdClient(idClient).filter(x ->
                 YearMonth.from(LocalDate.parse(x.getTransactionDate(), formatter)).equals(monthYear)).
