@@ -85,12 +85,12 @@ public class CardServiceImpl implements CardService {
                 .filter(account -> account.getAmount() > 0)
                 .sort(Comparator.comparing(BankAccount::isPrimaryAccount).reversed().thenComparing(x -> LocalDateTime.parse(x.getAssociationDate())))
                 .takeUntil(x -> sum.addAndGet(x.getAmount()) >= amountToPay)
-                .flatMap(account -> {
+                .flatMapSequential(account -> {
                     float transactionAmount = (account.getAmount() - (float)sum2.get()) <= 0 ? account.getAmount() :  (float)sum2.get();
                     float newAmount = account.getAmount() - transactionAmount;
                     account.setAmount(newAmount);
                     sum2.getAndAdd(transactionAmount*-1);
-                    Transaction t = new Transaction(null, LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString(), transactionAmount, "withdrawl" , account.getCustomerId(), account.getId(), account.getAmount());
+                    Transaction t = new Transaction(null, LocalDate.now().toString(), transactionAmount, "card payment" , account.getCustomerId(), account.getId(), account.getAmount(), debitCardId);
                     return this.webClient.build().post().uri("/transaction/")
                             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                             .body(Mono.just(t), Transaction.class)
