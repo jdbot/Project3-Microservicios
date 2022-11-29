@@ -2,7 +2,7 @@ package com.nttdata.card.service.implementation;
 
 import com.google.common.util.concurrent.AtomicDouble;
 import com.nttdata.card.model.BankAccount;
-import com.nttdata.card.model.DebitCard;
+import com.nttdata.card.model.Card;
 import com.nttdata.card.model.Transaction;
 import com.nttdata.card.repository.CardRepository;
 import com.nttdata.card.service.CardService;
@@ -16,10 +16,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Card service implementation.
@@ -34,18 +31,18 @@ public class CardServiceImpl implements CardService {
     CardRepository cardRepository;
 
     @Override
-    public Flux<DebitCard> findAll() {
+    public Flux<Card> findAll() {
         return cardRepository.findAll();
     }
 
     @Override
-    public Mono<DebitCard> register(DebitCard debitCard) {
-        return cardRepository.save(debitCard);
+    public Mono<Card> register(Card card) {
+        return cardRepository.save(card);
     }
 
     @Override
-    public Mono<DebitCard> update(DebitCard debitCard) {
-        return cardRepository.save(debitCard);
+    public Mono<Card> update(Card card) {
+        return cardRepository.save(card);
     }
 
     @Override
@@ -54,12 +51,12 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public Mono<DebitCard> findById(String id) {
+    public Mono<Card> findById(String id) {
         return cardRepository.findById(id);
     }
 
     @Override
-    public Mono<DebitCard> associatePrimaryAccount(String idAccount) {
+    public Mono<Card> associatePrimaryAccount(String idAccount) {
         return this.webClient.build().get().uri("/bankAccount/{bankAccountId}", idAccount).retrieve().bodyToMono(BankAccount.class)
                 .flatMap( x -> this.findById(x.getDebitCardId()))
                 .filter(debitcard -> debitcard.getPrimaryAccountId()==null)
