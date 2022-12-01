@@ -9,6 +9,11 @@ services:
       - "8888:8888"
     networks:
       - ms-bank
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/client-service/dev"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
   eureka-server:
     image: eureka-server
     container_name: eureka-server
@@ -19,7 +24,7 @@ services:
       - config-server
     depends_on:
       config-server:
-        condition: service_started
+        condition: service_healthy
     networks:
       - ms-bank
   api-gateway:
@@ -32,7 +37,7 @@ services:
       - config-server
     depends_on:
       config-server:
-        condition: service_started
+        condition: service_healthy
       eureka-server:
         condition: service_started
     networks:
